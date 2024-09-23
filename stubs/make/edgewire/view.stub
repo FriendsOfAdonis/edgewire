@@ -1,0 +1,6 @@
+{{{
+  exports({
+    to: app.viewsPath(view.path, view.fileName)
+  })
+}}}
+<div></div>

@@ -1,0 +1,6 @@
+{{{
+  exports({
+    to: filePath
+  })
+}}}
+import edgewire from 'edgewire/services/edgewire'

@@ -1,0 +1,12 @@
+{{{
+  exports({
+    to: app.componentsPath(component.path, component.fileName)
+  })
+}}}
+import { Component, view } from 'edgewire'
+
+export default class {{ component.className }} extends Component {
+  render() {
+    return view('{{ view.templatePath }}')
+  }
+}
