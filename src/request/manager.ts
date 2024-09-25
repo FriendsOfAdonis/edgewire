@@ -1,13 +1,13 @@
 import { HttpContext } from '@adonisjs/core/http'
-import { HandleComponents } from './handle_components.js'
 import { inject } from '@adonisjs/core'
+import { ComponentManager } from '../component/manager.js'
 
 @inject()
-export class HandleRequests {
-  #handleComponents: HandleComponents
+export class RequestManager {
+  #componentManager: ComponentManager
 
-  constructor(handleComponents: HandleComponents) {
-    this.#handleComponents = handleComponents
+  constructor(componentManager: ComponentManager) {
+    this.#componentManager = componentManager
   }
 
   public async handleUpdate(ctx: HttpContext) {
@@ -15,7 +15,7 @@ export class HandleRequests {
 
     const componentResponses = []
     for (const payload of payloads) {
-      const { snapshot, effects } = await this.#handleComponents.update(
+      const { snapshot, effects } = await this.#componentManager.update(
         JSON.parse(payload.snapshot),
         payload.updates,
         payload.calls,

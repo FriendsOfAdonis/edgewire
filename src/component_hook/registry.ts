@@ -1,5 +1,5 @@
-import { ComponentHook, ComponentHookEvents } from './component_hook.js'
 import Hooks from '@poppinss/hooks'
+import { ComponentHook, ComponentHookEvents } from './main.js'
 
 export class ComponentHookRegistry {
   components: ComponentHook[] = []

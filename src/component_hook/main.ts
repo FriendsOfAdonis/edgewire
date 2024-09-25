@@ -1,7 +1,7 @@
 import Hooks from '@poppinss/hooks'
-import { Component } from './component.js'
-import { View } from './view.js'
-import { ViewContext } from './view_context.js'
+import { Component } from '../component/main.js'
+import { View } from '../view.js'
+import { ViewContext } from '../view_context.js'
 
 export type ComponentHookEvents = {
   boot: [[Component], []]

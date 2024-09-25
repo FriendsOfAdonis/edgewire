@@ -1,7 +1,7 @@
 import edge from 'edge.js'
 import { edgewireTag } from '../src/edge/tags/edgewire.js'
 import { ApplicationService } from '@adonisjs/core/types'
-import { ComponentRegistry } from '../src/component_registry.js'
+import { ComponentRegistry } from '../src/component/registry.js'
 import { edgewireScriptsTag } from '../src/edge/tags/edgewire_scripts.js'
 import { Edgewire } from '../src/edgewire.js'
 import { LifecycleComponentHook } from '../src/features/lifecycle/component_hook.js'

@@ -1,22 +1,21 @@
 import { inject } from '@adonisjs/core'
-import { Component } from './component.js'
-import { ComponentRegistry } from './component_registry.js'
-import { insertAttributesIntoHtmlRoot } from './utils.js'
-import { ComponentSnapshot, ComponentCall, ComponentUpdates } from './types.js'
-import { ComponentContext } from './component_context.js'
-import { E_INVALID_CHECKSUM } from './errors.js'
-import { generateChecksum, verifyChecksum } from './utils/checksum.js'
-import { View } from './view.js'
 import string from '@adonisjs/core/helpers/string'
-import { getPublicProperties } from './utils/object.js'
 import { HttpContext } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
-import emitter from '@adonisjs/core/services/emitter'
-import { ComponentHookRegistry } from './component_hook_registry.js'
-import { ViewContext } from './view_context.js'
+import { ComponentRegistry } from './registry.js'
+import { ComponentHookRegistry } from '../component_hook/registry.js'
+import { insertAttributesIntoHtmlRoot } from '../utils.js'
+import { ComponentCall, ComponentSnapshot, ComponentUpdates } from '../types.js'
+import { Component } from './main.js'
+import { getPublicProperties } from '../utils/object.js'
+import { View } from '../view.js'
+import { ViewContext } from '../view_context.js'
+import { ComponentContext } from './context.js'
+import { generateChecksum, verifyChecksum } from '../utils/checksum.js'
+import { E_INVALID_CHECKSUM } from '../errors.js'
 
 @inject()
-export class HandleComponents {
+export class ComponentManager {
   #componentsRegistry: ComponentRegistry
   #componentHookRegistry: ComponentHookRegistry
 
@@ -60,7 +59,6 @@ export class HandleComponents {
 
     let html = await this.#render(component)
     html = insertAttributesIntoHtmlRoot(html, {
-      'wire:effects': [],
       'wire:snapshot': newSnapshot,
     })
 

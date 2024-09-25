@@ -1,8 +1,8 @@
 import { HttpContext } from '@adonisjs/core/http'
-import { View } from './view.js'
 import { compose } from '@adonisjs/core/helpers'
-import { WithAttributes } from './mixins/with_attributes.js'
-import { LifecycleHooks } from './features/lifecycle/mixins/lifecycle_hooks.js'
+import { LifecycleHooks } from '../features/lifecycle/mixins/lifecycle_hooks.js'
+import { WithAttributes } from '../mixins/with_attributes.js'
+import { View } from '../view.js'
 
 class BaseComponent {}
 

@@ -1,4 +1,4 @@
-import { Component } from './component.js'
+import { Component } from './main.js'
 
 export class ComponentContext {
   readonly isMounting: boolean
