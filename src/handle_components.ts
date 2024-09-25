@@ -12,27 +12,34 @@ import { getPublicProperties } from './utils/object.js'
 import { HttpContext } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
 import emitter from '@adonisjs/core/services/emitter'
+import { ComponentHookRegistry } from './component_hook_registry.js'
+import { ViewContext } from './view_context.js'
 
 @inject()
 export class HandleComponents {
   #componentsRegistry: ComponentRegistry
+  #componentHookRegistry: ComponentHookRegistry
 
-  constructor(edgewire: ComponentRegistry) {
-    this.#componentsRegistry = edgewire
+  constructor(componentsRegistry: ComponentRegistry, componentHookRegistry: ComponentHookRegistry) {
+    this.#componentsRegistry = componentsRegistry
+    this.#componentHookRegistry = componentHookRegistry
   }
 
   async mount(name: string, ctx: HttpContext) {
     const component = this.#componentsRegistry.new(ctx, name)
-    const context = new ComponentContext(component, true)
+
+    const mount = this.#componentHookRegistry.hooks.runner('mount')
+
+    await mount.run(component, {})
 
     let html = await this.#render(component)
-
-    emitter.emit('edgewire:hydrate', { component, context })
 
     html = insertAttributesIntoHtmlRoot(html, {
       'wire:effects': [],
       'wire:snapshot': this.#snapshot(component),
     })
+
+    await mount.cleanup(html)
 
     return html
   }
@@ -56,6 +63,8 @@ export class HandleComponents {
       'wire:effects': [],
       'wire:snapshot': newSnapshot,
     })
+
+    context.addEffect('html', html)
 
     return { snapshot: newSnapshot, effects: context.effects }
   }
@@ -81,15 +90,21 @@ export class HandleComponents {
 
   async #render(component: Component, _default?: string): Promise<string> {
     const { view, properties } = await this.#getView(component)
+    const viewContext = new ViewContext()
 
-    emitter.emit('edgewire:render', { component, view, properties })
+    const render = this.#componentHookRegistry.hooks.runner('render')
+    await render.run(component, view, properties)
 
     let html = await view.render()
     html = insertAttributesIntoHtmlRoot(html, {
       'wire:id': component.id,
     })
 
-    emitter.emit('edgewire:render:after', { component, view, properties })
+    const replaceHtml = (newHtml: string) => {
+      html = newHtml
+    }
+
+    await render.cleanup(html, replaceHtml, viewContext)
 
     return html
   }
